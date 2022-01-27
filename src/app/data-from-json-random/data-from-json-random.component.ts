@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Country } from '../interfaces/country';
 import { CountriesService } from '../services/countries.service';
+import { HandleCountriesService } from '../services/handle-countries.service';
 
 @Component({
   selector: 'app-data-from-json-random',
@@ -12,17 +13,27 @@ import { CountriesService } from '../services/countries.service';
 export class DataFromJsonRandomComponent implements OnInit {
 
   countries: Country[] = [];
+  countriesReady: boolean = false;
   randCountry$: Subject<Country> = new Subject<Country>();
   randCountry : Country = {} as Country;
 
-  constructor(private countriesService: CountriesService) { 
-    
+  constructor(private handleCountriesService: HandleCountriesService) { 
+    handleCountriesService.countriesReady$.subscribe((b: boolean) => {
+      if(this.countriesReady !== b) {
+        this.countriesReady = b;
+      } 
+    })
   }
 
 
   ngOnInit(): void {
-    this.countriesService.getCountries().subscribe((data: Country[]) => {
-      next: this.countries = data;
+    this.handleCountriesService.loadCountries();
+    this.handleCountriesService.countries$.subscribe((data: Country[]) => {
+      next: 
+      if(this.countries.length !== data.length && this.countriesReady){
+        this.countries = data;
+      }
+
     });
     setInterval(() => {
       this.getRandomCountry();
@@ -33,9 +44,11 @@ export class DataFromJsonRandomComponent implements OnInit {
   getRandomCountry() {
     //console.log("next called...")
     let c: Country[] = [];
-    let s  = new Subject<Country>();
-    this.countriesService.getCountries().subscribe((data: Country[]) => {
-      next: c = data;
+    this.handleCountriesService.countries$.subscribe((data: Country[]) => {
+      next: 
+      if(c.length !== data.length && this.countriesReady){
+        c = data;
+      }
       complete: 
       if(c[0] !== undefined) {
         this.randCountry$.next(c[Math.floor(Math.random()*c.length)]);

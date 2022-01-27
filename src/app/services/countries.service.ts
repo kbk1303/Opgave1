@@ -11,7 +11,8 @@ export class CountriesService {
   constructor(private http:HttpClient) { }
 
   getCountries(): Observable<Country[]> {
-    return this.http.get<Country[]>('./assets/data/countries.json');
+    //return this.http.get<Country[]>('./assets/data/countries.json');
+    return this.http.get<Country[]>('http://localhost:3000/all/countries');
   }
 
 }
