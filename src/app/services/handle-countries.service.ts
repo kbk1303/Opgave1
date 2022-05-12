@@ -22,7 +22,7 @@ export class HandleCountriesService {
 
       complete:
       //console.log('complete called..')
-      this.countries$.next(data);
+      this.countries$.next(counts);
       this.countriesReady$.next(true);
       //console.log("countries$", this.countries$.next.length);
      });
