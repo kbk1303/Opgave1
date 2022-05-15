@@ -1,9 +1,8 @@
-<div *ngIf="countriesReady">
+<div *ngIf="(randCountry$ | async) as c, else loading">
   <h4>Randomly selected country from Observable</h4>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Country</th>
         <th scope="col">Area</th>
         <th scope="col">Population</th>
@@ -11,14 +10,17 @@
     </thead>
     <tbody>
       <tr>
-        <td scope="row">1</td>
         <td>
-          <img src = "https://upload.wikimedia.org/wikipedia/commons/{{randCountry.flag}}" class="mr-2" style="width: 20px">
-          {{ randCountry.name }}
+          <img src = "https://upload.wikimedia.org/wikipedia/commons/{{c.flag}}" class="mr-2" style="width: 20px">
+          {{ c.name }}
         </td>
-        <td>{{ randCountry.area | number }}</td>
-        <td>{{ randCountry.population | number }}</td>
+        <td>{{ c.area | number }}</td>
+        <td>{{ c.population | number }}</td>
       </tr>
     </tbody>
   </table>
+  <!-- </div> -->
 </div>
+<ng-template #loading>
+  <h3><p>Waiting for matching countries from the server...</p></h3>
+</ng-template>

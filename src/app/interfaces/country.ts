@@ -1,6 +1,6 @@
 export interface Country {
-    name: string;
-    flag: string;
-    area: number;
-    population: number;
+    name: string | null;
+    flag: string | null;
+    area: number | null;
+    population: number | null;
 }
